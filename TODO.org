@@ -1,0 +1,9 @@
+#  LocalWords:  Firestore Firebase
+* Goals
+  - Rebuild the project starting with a TDD server.
+    1. Set up a tested Hello World server-less function
+       - [ ] uses typescript for tests and source
+       - [ ] uses Apollo
+       - [ ] uses Firebase
+       - [ ] connects to Firestore
+       - [ ] tests Firestore functionality using the emulators
