@@ -22,7 +22,7 @@ interface IMockData {
  * @param {Firestore} db - Database to seed.
  * @param {IMockData[]} data - Data to seed.
  */
-async function seedDB(db: firestore, data: IMockData[]) {
+async function seedTestDB(db: firestore, data: IMockData[]) {
     await firebase.loadFirestoreRules({
         projectId,
         rules: allowAllRules,
@@ -48,25 +48,51 @@ async function seedDB(db: firestore, data: IMockData[]) {
  * @param {IMockData[]?} data - Parameter description.
  * @returns {Firestore} Test database.
  */
-export async function setup(
+export async function setupTestDB(
     auth: object,
     data?: IMockData[]
 ): Promise<firestore> {
     const db = firebase.initializeTestApp({ projectId, auth }).firestore()
 
     if (data) {
-        await seedDB(db, data)
+        await seedTestDB(db, data)
     }
 
     return db
+}
+
+/**
+ * Initialize a test admin app and return firestore. Seed database ignoring
+ * rules if data is given
+ * @param {IMockData[]?} data - Parameter description.
+ * @returns {Firestore} Test database.
+ */
+export async function setupAdminTestDB(data?: IMockData[]): Promise<firestore> {
+    const db = firebase.initializeAdminApp({ projectId }).firestore()
+
+    if (data) {
+        await seedTestDB(db, data)
+    }
+
+    return db
+}
+
+export async function firestorePreTest() {
+    // Clear the database between tests
+    await firebase.clearFirestoreData({ projectId })
+}
+
+export async function firestoreTeardown() {
+    await Promise.all(firebase.apps().map(app => app.delete()))
+    console.log(`View rule coverage information at ${coverageUrl}\n`)
 }
 
 export {}
 declare global {
     namespace jest {
         interface Matchers<R> {
-            toAllow(): R
-            toDeny(): R
+            toAllow(): Promise<R>
+            toDeny(): Promise<R>
         }
     }
 }

@@ -1,13 +1,18 @@
-import { firestore } from './getFirestore'
+import { IResolvers } from 'graphql-tools'
+import { Store } from './store'
 
-export const resolvers = {
-  Query: {
-    async hello() {
-      console.log(firestore.collection)
-      const collection = firestore.collection('testing')
-      const docRef = collection.doc('test')
-      await docRef.set({ test: 'testing2' })
-      return 'Hello World'
+interface IContext {
+    dataSources: {
+        store: Store
+    }
+}
+
+export const resolvers: IResolvers<any, IContext> = {
+    Query: {
+        async hello(_, __, { dataSources }) {
+            const { store } = dataSources
+            store.writeHelloWorld()
+            return 'Hello World'
+        },
     },
-  },
 }
