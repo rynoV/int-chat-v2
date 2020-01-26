@@ -11,10 +11,6 @@
     "target": "es2017",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "typeRoots": [
-      "./@types",
-      "*/types"
-    ],
     "noEmit": false,
     "incremental": true,
     "noFallthroughCasesInSwitch": true,

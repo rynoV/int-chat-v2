@@ -1,0 +1,14 @@
+#  LocalWords:  Firestore Firebase
+* Goals
+  - Rebuild the project starting with a TDD server.
+    1. Set up a tested Hello World server-less function
+       - Test Firestore
+       - Test Apollo
+* Testing
+  - Don't forget to start the emulators for tests running Firebase code
+  - An error like
+    : FirebaseError: 7 PERMISSION_DENIED: false for 'update' @ L5
+    means that an update operation was tried but the rules did not allow it.
+    These can occur from ~firebase.assertSucceeds~ calls.
+  - Remember to await expect calls using ~toDeny/toAllow~. If you don't those
+    tests will pass every time.
